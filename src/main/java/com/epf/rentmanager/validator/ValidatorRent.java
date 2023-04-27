@@ -8,6 +8,7 @@ import com.epf.rentmanager.service.VehicleService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class ValidatorRent {
         for (LocalDate date : dates) {
             if ( reservation.getDebut().equals(date) || reservation.getFin().equals(date) ){
                 System.out.println("La voiture est deja reservé se jour");
+                JFrame jFrame = new JFrame();
+                JOptionPane.showMessageDialog(jFrame, "La voiture est deja reservé se jour");
                 return false;
             }
         }
@@ -38,13 +41,23 @@ public class ValidatorRent {
     public static boolean rent_plus_de_7(Reservation rent) {
         // vérifier que la voiture n'est pas louée plus de 7 jours pas même utilisateur
         System.out.println("La voiture ne peut pas louée plus de 7 jours par le même utilisateur, le demande est de " + Period.between(rent.getDebut(), rent.getFin()).getDays()+"jours");
-        return
-                Period.between(rent.getDebut(), rent.getFin()).getDays() <=7;
+        if (Period.between(rent.getDebut(), rent.getFin()).getDays() <=7){
+            return true;
+        }else{
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "La voiture ne peut pas louée plus de 7 jours par le même client");
+            return false;
+        }
     }
     public static boolean date_valide(Reservation rent) {
         // vérifier que les dates de debut et fin correspondent
-        return
-                rent.getDebut().isBefore(rent.getFin());
+        if (rent.getDebut().isBefore(rent.getFin())){
+            return true;
+        }else{
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "La date de debut ne correspont pas avec la date de fin");
+            return false;
+        }
     }
     public static boolean plus_de_30j(Reservation reservation) throws ServiceException {
         // verifier que la voiture n'est pas réservé 30 jours de suite sans pause
@@ -70,6 +83,8 @@ public class ValidatorRent {
         System.out.println(count);
         if(count > 30){
             System.out.println("La voiture a été reservée plus de 30j de suite");
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "La voiture a été reservée plus de 30j de suite");
             return false;
         }else{
             return true;
